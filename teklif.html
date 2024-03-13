@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stfu Teklif</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        text-align: center;
+        padding-top: 100px;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 18px;
+        margin: 10px;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+    }
+
+    #yes-button {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    #no-button {
+        background-color: #f44336;
+        color: white;
+    }
+
+    #think-button {
+        background-color: #ff9800;
+        color: white;
+    }
+
+    #result-message {
+        margin-top: 20px;
+        color: #333;
+        font-size: 24px;
+    }
+
+    .emoji {
+        animation: emojiAnimation 1s infinite;
+    }
+
+    @keyframes emojiAnimation {
+        0% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0); }
+    }
+</style>
+</head>
+<body>
+
+    <audio autoplay>
+        <source src="nerdesin.mp3" type="audio/mpeg">
+        Tarayıcınız audio öğesini desteklemiyor.
+      </audio>
+
+<div class="container">
+    <p id="proposal-message"></p>
+    <button id="yes-button">Evet</button>
+    <button id="think-button">Düşünmek İstiyorum</button>
+    <button id="no-button">Hayır.</button>
+    <p id="result-message"></p>
+</div>
+
+<audio id="nerdesin" src="nerdesin.mp3" loop></audio>
+
+<script>
+    const yesButton = document.getElementById('yes-button');
+    const noButton = document.getElementById('no-button');
+    const thinkButton = document.getElementById('think-button');
+    const resultMessage = document.getElementById('result-message');
+    const ButtonMusic = document.getElementById('nerdesin');
+    const proposalMessage = document.getElementById('proposal-message');
+
+    const discordWebhookURL = 'buraya teklifin cevabinin hangi kanala düşeceğinin webhookunu girin';
+
+    function sendDiscordMessage(buttonClicked) {
+        fetch(discordWebhookURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ content: `bu karı senin teklifine **${buttonClicked}** cevabını verdi.` }),
+        });
+    }
+
+    yesButton.addEventListener('click', function() {
+        resultMessage.innerText = 'Hocam cevabını stfuya özel olarak yolladım, çok sevinecek!!!';
+        ButtonMusic.play();
+        sendDiscordMessage('Evet');
+    });
+
+    noButton.addEventListener('click', function() {
+        resultMessage.innerText = 'Hocam cevabını stfuya özel olarak yolladım, mağara ayısı üzülecek hocam..';
+        ButtonMusic.play();
+        sendDiscordMessage('Hayır');
+    });
+
+    thinkButton.addEventListener('click', function() {
+        resultMessage.innerText = 'Ama şimdi böyle olmadı ki hocam, birini seçi ver :(';
+        ButtonMusic.play();
+        sendDiscordMessage('Biraz Düşünmek İstiyorum');
+    });
+    const TeklifMesaji = "teklif mesajini buraya yazin, onuda benden beklemeyin amk";
+    
+    function typeProposalMessage() {
+        let index = 0;
+        const typingInterval = setInterval(() => {
+            if (index === TeklifMesaji.length) {
+                clearInterval(typingInterval);
+                return;
+            }
+            proposalMessage.innerHTML += TeklifMesaji.charAt(index);
+            index++;
+        }, 100);
+    }
+    function showEmojis(emojis) {
+        resultMessage.innerHTML = '';
+        emojis.split('').forEach(emoji => {
+            const span = document.createElement('span');
+            span.classList.add('emoji');
+            span.innerText = emoji;
+            resultMessage.appendChild(span);
+        });
+    }
+    typeProposalMessage();
+</script>
+
+</body>
+</html>
